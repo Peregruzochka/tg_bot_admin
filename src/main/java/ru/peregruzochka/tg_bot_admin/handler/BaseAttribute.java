@@ -47,6 +47,4 @@ public abstract class BaseAttribute {
                 .callbackData(callback)
                 .build();
     }
-
-
 }

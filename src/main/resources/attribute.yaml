@@ -17,9 +17,30 @@ attr:
 
   add-time-slot:
     text: |
-      Выбери преподавателя
+      Выбери педагога
     buttons:
-      - Назад
+      - « Назад
     callbacks:
       - /start
     choose-teacher-callback: "/teacher:"
+
+  choose-day:
+    text: |
+      Педагог: {}
+    buttons:
+      - « Назад
+    callbacks:
+      - /add-time-slot
+    week-days-names:
+      - Пн
+      - Вт
+      - Ср
+      - Чт
+      - Пт
+      - Сб
+      - Вс
+    navigate-callback: "/navigate:"
+    navigate-next-button: »
+    navigate-back-button: «
+    empty-callback: /empty
+

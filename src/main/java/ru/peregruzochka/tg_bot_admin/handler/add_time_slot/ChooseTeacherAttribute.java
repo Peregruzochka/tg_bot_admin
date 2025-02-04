@@ -14,15 +14,12 @@ import ru.peregruzochka.tg_bot_admin.handler.BaseAttribute;
 @ConfigurationProperties(prefix = "attr.add-time-slot")
 @Getter
 @Setter
-public class AddTimeSlotAttribute extends BaseAttribute {
+public class ChooseTeacherAttribute extends BaseAttribute {
     private String chooseTeacherCallback;
 
-    public InlineKeyboardMarkup generateMarkup(List<TeacherDto> teachers) {
+    public InlineKeyboardMarkup generateTeacherMarkup(List<TeacherDto> teachers) {
            return super.generateMarkup(generateButtons(teachers));
-
-
     }
-
 
     private List<List<InlineKeyboardButton>> generateButtons(List<TeacherDto> teachers) {
         return List.of(teachers.stream()
