@@ -180,6 +180,20 @@ public class TelegramBot extends TelegramLongPollingBot {
             throw new RuntimeException();
         }
     }
+
+    public void answerCallback(Update update) {
+        String callbackId = update.getCallbackQuery().getId();
+
+        AnswerCallbackQuery close = AnswerCallbackQuery.builder()
+                .callbackQueryId(callbackId)
+                .build();
+
+        try {
+            execute(close);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 
 
