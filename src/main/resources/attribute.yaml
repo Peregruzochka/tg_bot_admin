@@ -3,8 +3,8 @@ attr:
     text: | 
       <b>admin tool</b>
     buttons:
-      - Добавить занятия
-      - Убрать занятие
+      - Добавить время педагога
+      - Убрать время педагога
       - Занятия на сегодня
       - Занятия на завтра
       - Занятия в конкретный день
@@ -31,14 +31,7 @@ attr:
       - « Назад
     callbacks:
       - /add-time-slot
-    week-days-names:
-      - Пн
-      - Вт
-      - Ср
-      - Чт
-      - Пт
-      - Сб
-      - Вс
+    week-days-names: [ Пн, Вт, Ср, Чт, Пт, Сб, Вс ]
     navigate-callback: "/navigate:"
     navigate-next-button: »
     navigate-back-button: «
@@ -59,6 +52,14 @@ attr:
     end-hour: 20
     choose-hour-callback: "/hour:"
     choose-hour-button-text: "{0}:00 - {1}:00"
+    exception-text: |
+      <b>Выбери корректное время</b>
+      
+      Педагог: {0}
+      Дата: {1}
+      
+      Время когда педагог может или будет проводить занятия:
+      {2}
 
   choose-minute:
     text: |

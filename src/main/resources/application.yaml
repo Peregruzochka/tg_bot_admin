@@ -10,3 +10,7 @@ logging:
     ru.pereguzochka.telegram_bot: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%level] %logger{36} - %msg%n"
+
+bot-backend:
+  host: http://localhost
+  port: 8081

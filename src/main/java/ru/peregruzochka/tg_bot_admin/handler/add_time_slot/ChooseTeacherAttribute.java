@@ -1,6 +1,7 @@
 package ru.peregruzochka.tg_bot_admin.handler.add_time_slot;
 
 import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -18,16 +19,17 @@ public class ChooseTeacherAttribute extends BaseAttribute {
     private String chooseTeacherCallback;
 
     public InlineKeyboardMarkup generateTeacherMarkup(List<TeacherDto> teachers) {
-           return super.generateMarkup(generateButtons(teachers));
+        return super.generateMarkup(generateButtons(teachers));
     }
 
     private List<List<InlineKeyboardButton>> generateButtons(List<TeacherDto> teachers) {
-        return List.of(teachers.stream()
+        return teachers.stream()
                 .map(teacherDto -> {
                     String buttonText = teacherDto.getName();
                     String buttonCallback = chooseTeacherCallback + teacherDto.getId();
                     return super.createButton(buttonText, buttonCallback);
-                }).toList());
+                })
+                .map(List::of)
+                .toList();
     }
-
 }

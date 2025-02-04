@@ -28,7 +28,7 @@ public class AddTImeSlotOtherDateHandler implements UpdateHandler {
         UUID teacherId = timeSlotSaver.getTimeSlotDto().getTeacherId();
         String teacherName = teacherDtoCache.get(teacherId).getName();
 
-        bot.send(
+        bot.edit(
                 chooseDayAttribute.generateText(teacherName),
                 chooseDayAttribute.generateChooseDayMarkup(0),
                 update

@@ -5,12 +5,11 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
 import ru.peregruzochka.tg_bot_admin.cache.TeacherDtoCache;
+import ru.peregruzochka.tg_bot_admin.client.BotBackendClient;
 import ru.peregruzochka.tg_bot_admin.dto.TeacherDto;
 import ru.peregruzochka.tg_bot_admin.handler.UpdateHandler;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -18,6 +17,7 @@ public class AddTimeSlotHandler implements UpdateHandler {
     private final TelegramBot bot;
     private final ChooseTeacherAttribute chooseTeacherAttribute;
     private final TeacherDtoCache teacherDtoCache;
+    private final BotBackendClient botBackendClient;
 
     @Override
     public boolean isApplicable(Update update) {
@@ -26,25 +26,18 @@ public class AddTimeSlotHandler implements UpdateHandler {
 
     @Override
     public void compute(Update update) {
-        TeacherDto teacherDto = TeacherDto.builder()
-                .id(UUID.randomUUID())
-                .name("Татьяна")
-                .imageID(UUID.randomUUID())
-                .build();
-        List<TeacherDto> list = new ArrayList<>() {{
-            add(teacherDto);
-        }};
+        List<TeacherDto> teachers = botBackendClient.getAllTeachers();
 
-        //TODO: backend List<TeacherDto> getAllTeachers()
-
-        for (TeacherDto teacher : list) {
+        for (TeacherDto teacher : teachers) {
             teacherDtoCache.put(teacher.getId(), teacher);
         }
 
         bot.edit(
                 chooseTeacherAttribute.getText(),
-                chooseTeacherAttribute.generateTeacherMarkup(list),
+                chooseTeacherAttribute.generateTeacherMarkup(teachers),
                 update
         );
     }
+
+
 }

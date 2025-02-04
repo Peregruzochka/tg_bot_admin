@@ -31,7 +31,7 @@ public class AddTimeSlotThatDateHandler implements UpdateHandler {
         UUID teacherId = timeSlotSaver.getTimeSlotDto().getTeacherId();
         String teacherName = teacherDtoCache.get(teacherId).getName();
 
-        bot.edit(
+        bot.send(
                 chooseHourAttribute.generateText(teacherName, date.toLocalDate().toString()),
                 chooseHourAttribute.generateChooseHourMarkup(),
                 update

@@ -1,14 +1,17 @@
 package ru.peregruzochka.tg_bot_admin.handler.add_time_slot;
 
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
 import ru.peregruzochka.tg_bot_admin.cache.TeacherDtoCache;
 import ru.peregruzochka.tg_bot_admin.cache.TimeSlotSaver;
+import ru.peregruzochka.tg_bot_admin.client.BotBackendClient;
 import ru.peregruzochka.tg_bot_admin.dto.TimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.handler.UpdateHandler;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +23,8 @@ public class ChooseMinuteHandler implements UpdateHandler {
     private final TimeSlotSaver timeSlotSaver;
     private final TeacherDtoCache teacherDtoCache;
     private final ViewTimeSlotAttribute viewTimeSlotAttribute;
+    private final BotBackendClient botBackendClient;
+    private final ChooseHourAttribute chooseHourAttribute;
 
     @Override
     public boolean isApplicable(Update update) {
@@ -34,18 +39,28 @@ public class ChooseMinuteHandler implements UpdateHandler {
         timeSlotSaver.getTimeSlotDto().setStartTime(startTime);
 
         TimeSlotDto timeSlotDto = timeSlotSaver.getTimeSlotDto();
-
-        //todo: TimeSlotDto addTimeSlot(TimeSlotDto timeSlotDto)
-        //todo: List<TimeSlotDto> getTeacherTimeSlotByDate(UUID teacherId, LocalDate localDate)
-        timeSlotDto.setEndTime(timeSlotDto.getStartTime().plusMinutes(45));
-        List<TimeSlotDto> teacherTimeSlot = List.of(timeSlotDto);
-
         UUID teacherId = timeSlotDto.getTeacherId();
         String teacherName = teacherDtoCache.get(teacherId).getName();
-        String localDate = timeSlotDto.getStartTime().toLocalDate().toString();
+        LocalDate localDate = timeSlotDto.getStartTime().toLocalDate();
+
+        try {
+            botBackendClient.addTimeSlot(timeSlotDto);
+        } catch (FeignException exception) {
+            List<TimeSlotDto> timeSlotDtos = botBackendClient.getTeacherTimeSlotsByDate(teacherId, localDate);
+            LocalDateTime newStartTime = timeSlotSaver.getTimeSlotDto().getStartTime().toLocalDate().atStartOfDay();
+            timeSlotSaver.getTimeSlotDto().setStartTime(newStartTime);
+            bot.edit(
+                    chooseHourAttribute.generateTextAfterException(teacherName, localDate.toString(), timeSlotDtos),
+                    chooseHourAttribute.generateChooseHourMarkup(),
+                    update
+            );
+            return;
+        }
+
+        List<TimeSlotDto> teacherTimeSlot = botBackendClient.getTeacherTimeSlotsByDate(teacherId, localDate);
 
         bot.edit(
-                viewTimeSlotAttribute.generateText(teacherName, localDate, teacherTimeSlot),
+                viewTimeSlotAttribute.generateText(teacherName, localDate.toString(), teacherTimeSlot),
                 viewTimeSlotAttribute.createMarkup(),
                 update
         );

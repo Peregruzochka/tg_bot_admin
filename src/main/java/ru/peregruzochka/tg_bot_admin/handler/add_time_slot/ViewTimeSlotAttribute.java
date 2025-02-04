@@ -19,7 +19,7 @@ public class ViewTimeSlotAttribute extends BaseAttribute {
         for (TimeSlotDto timeSlotDto : timeSlotDtos) {
             String startTime = convertTime(timeSlotDto.getStartTime());
             String endTime = convertTime(timeSlotDto.getEndTime());
-            timeSlotText.append(i++).append(". ").append(startTime).append(" - ").append(endTime);
+            timeSlotText.append(i++).append(". ").append(startTime).append(" - ").append(endTime).append("\n");
         }
         return super.getText()
                 .replace("{0}", teacherName)
