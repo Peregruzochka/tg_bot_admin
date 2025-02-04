@@ -1,0 +1,25 @@
+attr:
+  start:
+    text: | 
+      <b>admin tool</b>
+    buttons:
+      - Добавить занятия
+      - Убрать занятие
+      - Занятия на сегодня
+      - Занятия на завтра
+      - Занятия в конкретный день
+    callbacks:
+      - /add-time-slot
+      - /rm-time-slot
+      - /search-today
+      - /search-yesterday
+      - /search-by-day
+
+  add-time-slot:
+    text: |
+      Выбери преподавателя
+    buttons:
+      - Назад
+    callbacks:
+      - /start
+    choose-teacher-callback: "/teacher:"
