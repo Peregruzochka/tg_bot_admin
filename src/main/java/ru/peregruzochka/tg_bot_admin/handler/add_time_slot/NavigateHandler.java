@@ -6,37 +6,32 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
 import ru.peregruzochka.tg_bot_admin.cache.TeacherDtoCache;
 import ru.peregruzochka.tg_bot_admin.cache.TimeSlotSaver;
-import ru.peregruzochka.tg_bot_admin.dto.TeacherDto;
-import ru.peregruzochka.tg_bot_admin.dto.TimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.handler.UpdateHandler;
 
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class ChooseTeacherHandler implements UpdateHandler {
+public class NavigateHandler implements UpdateHandler {
     private final TelegramBot bot;
-    private final TeacherDtoCache cache;
     private final ChooseDayAttribute chooseDayAttribute;
     private final TimeSlotSaver timeSlotSaver;
+    private final TeacherDtoCache teacherDtoCache;
 
     @Override
     public boolean isApplicable(Update update) {
-        return update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("/teacher:");
+        return update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("/navigate:");
     }
 
     @Override
     public void compute(Update update) {
-        UUID teacherId = UUID.fromString(update.getCallbackQuery().getData().replace("/teacher:", ""));
-        TimeSlotDto timeSlotDto = new TimeSlotDto();
-        timeSlotDto.setTeacherId(teacherId);
-        timeSlotSaver.setTimeSlotDto(timeSlotDto);
-
-        TeacherDto teacherDto = cache.get(teacherId);
+        int offset = Integer.parseInt(update.getCallbackQuery().getData().replace("/navigate:", ""));
+        UUID teacherId = timeSlotSaver.getTimeSlotDto().getTeacherId();
+        String teacherName = teacherDtoCache.get(teacherId).getName();
 
         bot.edit(
-                chooseDayAttribute.generateText(teacherDto.getName()),
-                chooseDayAttribute.generateChooseDayMarkup(0),
+                chooseDayAttribute.generateText(teacherName),
+                chooseDayAttribute.generateChooseDayMarkup(offset),
                 update
         );
     }

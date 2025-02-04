@@ -50,8 +50,8 @@ public class ChooseDayAttribute extends BaseAttribute {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM yyyy", new Locale("ru"));
         String formattedDate = today.format(formatter);
 
-        InlineKeyboardButton nextButton = createButton(navigateNextButton, navigateCallback + ++monthOffset);
-        InlineKeyboardButton backButton = createButton(navigateBackButton, navigateCallback + --monthOffset);
+        InlineKeyboardButton nextButton = createButton(navigateNextButton, navigateCallback + (monthOffset + 1));
+        InlineKeyboardButton backButton = createButton(navigateBackButton, navigateCallback + (monthOffset - 1));
         InlineKeyboardButton navigateButton = createButton(formattedDate, emptyCallback);
 
         return new ArrayList<>() {{
