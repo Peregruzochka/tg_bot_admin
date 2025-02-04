@@ -21,10 +21,13 @@ import java.util.Locale;
 @ConfigurationProperties(prefix = "attr.choose-day")
 public class ChooseDayAttribute extends BaseAttribute {
     private List<String> weekDaysNames;
-    private String navigateCallback;
+
     private String navigateNextButton;
     private String navigateBackButton;
+
+    private String navigateCallback;
     private String emptyCallback;
+    private String chooseDayCallback;
 
     public String generateText(String teacherName) {
         return super.getText().replace("{}", teacherName);
@@ -79,12 +82,18 @@ public class ChooseDayAttribute extends BaseAttribute {
                 } else if (day > daysInMonth) {
                     weekLine.add(createButton(" ", emptyCallback));
                 } else {
-                    weekLine.add(createButton(String.valueOf(day++), emptyCallback));
+                    weekLine.add(createButton(String.valueOf(day), chooseDayCallback + createDate(yearMonth, day)));
+                    day++;
                 }
             }
             calendar.add(weekLine);
         }
-
         return calendar;
+    }
+
+    private String createDate(YearMonth yearMonth, int day) {
+        LocalDate date = yearMonth.atDay(day);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return date.format(formatter);
     }
 }

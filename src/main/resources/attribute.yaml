@@ -43,4 +43,52 @@ attr:
     navigate-next-button: »
     navigate-back-button: «
     empty-callback: /empty
+    choose-day-callback: "/day:"
+
+  choose-hour:
+    text: |
+      Выбери время начала занятия
+      
+      Педагог: {0}
+      Дата: {1}
+    buttons:
+      - « Назад
+    callbacks:
+      - /back-choose-day
+    start-hour: 10
+    end-hour: 20
+    choose-hour-callback: "/hour:"
+    choose-hour-button-text: "{0}:00 - {1}:00"
+
+  choose-minute:
+    text: |
+      Выбери время начала занятия
+
+      Педагог: {0}
+      Дата: {1}
+    buttons:
+      - « Назад
+    callbacks:
+      - /back-choose-hour
+    start-minute: 0
+    end-minute: 60
+    choose-minute-callback: "/minute:"
+
+  view-time-slot:
+    text: |
+      Информация о свободном времени
+      
+      Педагог: {0}
+      Дата: {1}
+      
+      {2}
+    buttons:
+      - Добавить еще одно занятие на эту дату
+      - Добавить еще одно занятие на другую дату
+      - В главное меню
+    callbacks:
+      - /add-time-slot-that-date
+      - /add-time-slot-other-date
+      - /start
+
 
