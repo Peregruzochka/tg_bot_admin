@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.peregruzochka.tg_bot_admin.dto.RegistrationDto;
 import ru.peregruzochka.tg_bot_admin.dto.TeacherDto;
 import ru.peregruzochka.tg_bot_admin.dto.TimeSlotDto;
 
@@ -32,4 +33,7 @@ public interface BotBackendClient {
 
     @GetMapping("/teachers")
     List<TeacherDto> getAllTeachers();
+
+    @GetMapping("/registrations/search-today")
+    List<RegistrationDto> getAllRegistrationsByToday();
 }

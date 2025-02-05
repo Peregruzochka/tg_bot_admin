@@ -126,3 +126,14 @@ attr:
 
     rm-time-slot-callback: "/time-slot-rm:"
 
+  search-all-today-registration:
+    text: |
+      Занятия на сегодня:
+      Дата: {0}
+      {1}
+    buttons:
+      - « Назад
+    callbacks:
+      - /start
+    special-text: |
+      Записей пока нет
