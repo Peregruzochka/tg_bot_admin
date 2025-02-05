@@ -92,4 +92,37 @@ attr:
       - /add-time-slot-other-date
       - /start
 
+  choose-teacher-rm-time-slot:
+    text: |
+      Выбери педагога:
+    buttons:
+      - « Назад
+    callbacks:
+      - /start
+    choose-teacher-rm-time-slot-callback: "/teacher-rm:"
+
+  choose-date-rm-time-slot:
+    text: |
+      Выбери дату когда хочешь освободить время педагога
+      
+      Педагог: {0}
+
+    buttons:
+      - « Назад
+    callbacks:
+      - /rm-time-slot
+    rm-date-callback: "/date-rm:"
+
+  choose-rm-time-slot:
+    text: |
+      Выбери время
+      
+      Педагог: {0}
+      Дата: {1}
+    buttons:
+      - « Назад
+    callbacks:
+      - /choose-date-rm
+
+    rm-time-slot-callback: "/time-slot-rm:"
 
