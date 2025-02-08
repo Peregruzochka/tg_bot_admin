@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
@@ -67,6 +68,20 @@ public class TelegramBot extends TelegramLongPollingBot {
                 .text(text)
                 .chatId(chatId)
                 .parseMode("HTML")
+                .build();
+
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void send(String text, Long chatId) {
+        SendMessage sendMessage = SendMessage.builder()
+                .text(text)
+                .parseMode(ParseMode.HTML)
+                .chatId(chatId)
                 .build();
 
         try {

@@ -25,8 +25,10 @@ repositories {
 }
 
 dependencies {
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

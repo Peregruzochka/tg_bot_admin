@@ -3,6 +3,9 @@ spring:
     import:
       - "optional:classpath:bot.yaml"
       - "optional:classpath:attribute.yaml"
+  data:
+    redis-channel:
+      new-registration: create-registration
 
 logging:
   level:

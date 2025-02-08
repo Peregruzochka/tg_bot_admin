@@ -1,5 +1,7 @@
 package ru.peregruzochka.tg_bot_admin;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,5 +27,12 @@ public class TgBotAdminApplication {
 		TelegramBotsApi botApi = new TelegramBotsApi(DefaultBotSession.class);
 		botApi.registerBot(bot);
 		return botApi;
+	}
+
+	@Bean
+	public ObjectMapper objectMapper() {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		return objectMapper;
 	}
 }
