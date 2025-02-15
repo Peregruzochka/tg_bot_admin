@@ -6,7 +6,10 @@ spring:
 
   data:
     redis-channel:
-      not-confirmed: not-confirmed
+      new-registration: create-registration
+      confirmed: confirmed
+      cancel: cancel
+
 
 logging:
   level:

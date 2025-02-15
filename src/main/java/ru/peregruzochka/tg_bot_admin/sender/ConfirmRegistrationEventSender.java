@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 public class ConfirmRegistrationEventSender {
     private final TelegramBot telegramBot;
     private final AdminChatIdSaver adminChatIdSaver;
+
     @Value("${attr.confirm-registration-event.text}")
     private String confirmRegistrationEventText;
 

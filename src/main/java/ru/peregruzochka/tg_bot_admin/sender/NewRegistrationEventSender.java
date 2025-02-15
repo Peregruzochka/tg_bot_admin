@@ -1,5 +1,6 @@
 package ru.peregruzochka.tg_bot_admin.sender;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
@@ -10,16 +11,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Component
+@RequiredArgsConstructor
 public class NewRegistrationEventSender {
     private final TelegramBot telegramBot;
     private final AdminChatIdSaver adminChatIdSaver;
+
     @Value("${attr.new-registration-event.text}")
     private String newRegistrationEventText;
 
-    public NewRegistrationEventSender(TelegramBot telegramBot, AdminChatIdSaver adminChatIdSaver) {
-        this.telegramBot = telegramBot;
-        this.adminChatIdSaver = adminChatIdSaver;
-    }
 
     public void send(RegistrationEvent registrationEvent) {
         telegramBot.send(createMessageText(registrationEvent), adminChatIdSaver.getChatId());
