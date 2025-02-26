@@ -3,17 +3,18 @@ attr:
     text: | 
       <b>admin tool</b>
     buttons:
-      - Добавить время педагога
-      - Убрать время педагога
-      - Занятия на сегодня
-      - Занятия на завтра
-      - Занятия в конкретный день
+      - Добавить окошко
+      - Убрать окошко
+      - Посмотреть занятия
+      - Добавить занятие
+      - Убрать занятие
+
     callbacks:
       - /add-time-slot
       - /rm-time-slot
-      - /search-today
-      - /search-yesterday
       - /search-by-day
+      - /add-registration
+      - /rm-registration
 
   add-time-slot:
     text: |
@@ -126,18 +127,6 @@ attr:
 
     rm-time-slot-callback: "/time-slot-rm:"
 
-  search-all-today-registration:
-    text: |
-      Занятия на сегодня:
-      Дата: {0}
-      {1}
-    buttons:
-      - « Назад
-    callbacks:
-      - /start
-    special-text: |
-      Записей пока нет
-
   new-registration-event:
     text: |
       <b>Клиент ЗАПИСАЛСЯ на занятие!</b>
@@ -168,3 +157,130 @@ attr:
       Родитель: {4} <i>({5})</i>
       Ребенок: {6} <i>({7})</i>  
       Причина: {8}
+
+  add-reg-choose-day:
+    text: |
+      <i>Выбери дату:</i>
+    buttons:
+      - « Назад
+    callbacks:
+      - /start
+    week-days-names: [ Пн, Вт, Ср, Чт, Пт, Сб, Вс ]
+    navigate-callback: "/add-reg-navigate:"
+    navigate-next-button: »
+    navigate-back-button: «
+    empty-callback: /empty
+    choose-day-callback: "/add-reg-day:"
+
+  add-reg-choose-teacher:
+    text: |
+      Дата: {0}
+      
+      <i>Выбери педагога:</i>
+    buttons:
+      - « Назад
+    callbacks:
+      - /add-registration
+    choose-teacher-callback: "/add-reg-teacher:"
+
+  add-reg-choose-timeslot:
+    text: |
+      Дата: {0}
+      Педагог: {1}
+
+      <i>Выбери время:</i>
+    buttons:
+      - « Назад
+    callbacks:
+      - /add-reg-choose-teacher
+    choose-timeslot-callback: "/add-reg-timeslot:"
+
+  add-reg-choose-lessons:
+    text: |
+      Дата: {0}
+      Время: {1}
+      Педагог: {2}
+
+      <i>Выбери направление:</i>
+    buttons:
+      - « Назад
+    callbacks:
+      - /add-reg-choose-timeslot
+    choose-lesson-callback: "/add-reg-lesson:"
+
+  add-reg-input-user-phone:
+    text: |
+      Дата: {0}
+      Время: {1}
+      Педагог: {2}
+      Направление: {3}
+      
+      <i>Введи номер телефона клиента:</i>
+    buttons:
+      - « Назад
+    callbacks:
+      - /add-reg-choose-lesson
+
+    wrong-number-text: |
+      <b>Введен некорректный номер! Введи номер еще раз</b>
+      
+      {}
+
+  add-reg-finish-attribute:
+    text: |
+      Дата: {0}
+      Время: {1}
+      Педагог: {2}
+      Направление: {3}
+      Клиент: {4} ({5})
+      Ребенок: {6} (<i>{7}</i>)
+      
+      <i>Все данные верны?</i>
+    buttons:
+      - Ввести имя клиента
+      - Ввести имя ребенка
+      - Ввести день рождения
+      - Заменить ребенка
+      - Все данные верны
+      - « Назад
+    callbacks:
+      - /input-user-name
+      - /input-child-name
+      - /input-child-birthday
+      - /change-child
+      - /send-to-backend
+      - /add-reg-input-user-phone-back
+
+    info-about-req-input: <b>введи данные</b>
+
+  add-reg-input-user-name:
+    text: |
+      Введи имя клиента:
+    buttons:
+      - « Назад
+    callbacks:
+      - /add-reg-finish
+
+  add-reg-input-child-name:
+    text: |
+      Введи имя ребенка:
+    buttons:
+      - « Назад
+    callbacks:
+      - /add-reg-finish
+
+  add-reg-input-child-birthday:
+    text: |
+      Введи месяц и год рождения ребенка:
+    buttons:
+      - « Назад
+    callbacks:
+      - /add-reg-finish
+
+  add-reg-send-to-backend:
+    text: |
+      Клиент записан
+    buttons:
+      - « В главное меню
+    callbacks:
+      - /start
