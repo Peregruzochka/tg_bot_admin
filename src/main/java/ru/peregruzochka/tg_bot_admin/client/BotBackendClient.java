@@ -27,6 +27,9 @@ public interface BotBackendClient {
     @GetMapping("/timeslots/by-date")
     List<TimeSlotDto> getTeacherTimeSlotsByDate(@RequestParam("teacher-id") UUID teacherId, @RequestParam LocalDate date);
 
+    @GetMapping("/timeslots/available-by-date")
+    List<TimeSlotDto> getTeacherAvailableTimeSlotsByDate(@RequestParam("teacher-id") UUID teacherId, @RequestParam LocalDate date);
+
     @GetMapping("/timeslots/next-month-search")
     List<TimeSlotDto> getTeacherTimeSlotsInNextMonth(@RequestParam("teacher-id") UUID teacherId);
 

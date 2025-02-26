@@ -31,7 +31,7 @@ public class AddRegChooseTimeslotHandler implements UpdateHandler {
         LocalDate localDate = registrationDtoSaver.getRegistrationDto().getSlot().getStartTime().toLocalDate();
         UUID teacherId = registrationDtoSaver.getRegistrationDto().getTeacher().getId();
 
-        List<TimeSlotDto> timeslots = botBackendClient.getTeacherTimeSlotsByDate(teacherId, localDate);
+        List<TimeSlotDto> timeslots = botBackendClient.getTeacherAvailableTimeSlotsByDate(teacherId, localDate);
 
         telegramBot.edit(
                 addRegChooseTimeSlotAttribute.generateText(registrationDtoSaver.getRegistrationDto()),
