@@ -240,14 +240,12 @@ attr:
       - Ввести имя клиента
       - Ввести имя ребенка
       - Ввести день рождения
-      - Заменить ребенка
       - Все данные верны
       - « Назад
     callbacks:
       - /input-user-name
       - /input-child-name
       - /input-child-birthday
-      - /change-child
       - /send-to-backend
       - /add-reg-input-user-phone-back
 
@@ -284,3 +282,33 @@ attr:
       - « В главное меню
     callbacks:
       - /start
+
+  search-by-day-choose-day:
+    text: |
+      Выбери дату:
+    buttons:
+      - « Назад
+    callbacks:
+      - /start
+    week-days-names: [ Пн, Вт, Ср, Чт, Пт, Сб, Вс ]
+    navigate-callback: "/search-by-day-navigate:"
+    navigate-next-button: »
+    navigate-back-button: «
+    empty-callback: /empty
+    choose-day-callback: "/search-by-day-day:"
+
+  show-reg-by-day:
+    buttons:
+      - « Назад
+    callbacks:
+      - /back-to-search-day
+
+    #1 --> 10:00 - 11:00
+    #2 --> Направление
+    #3 --> Ребенок
+    #4 --> Дата рождения
+    #5 --> Родитель
+    registration-pattern: |
+      <b>{1}, {2}</b>
+      <b>Ребенок:</b> {3}(<i>{4}</i>)
+      <b>Родитель:</b> {5}

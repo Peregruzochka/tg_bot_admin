@@ -45,6 +45,9 @@ public interface BotBackendClient {
     @GetMapping("/registrations/search-today")
     List<RegistrationDto> getAllRegistrationsByToday();
 
+    @GetMapping("/registrations/search-by-date")
+    List<RegistrationDto> getAllRegistrationsByDate(@RequestParam("date") LocalDate date);
+
     @PostMapping("/registrations")
     RegistrationDto addRegistration(@RequestBody RegistrationDto registrationDto);
 
