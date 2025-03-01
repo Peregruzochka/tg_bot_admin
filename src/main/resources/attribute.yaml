@@ -8,7 +8,6 @@ attr:
       - Посмотреть занятия
       - Добавить занятие
       - Отменить занятие
-      - Убрать занятие
 
     callbacks:
       - /add-time-slot
@@ -16,7 +15,6 @@ attr:
       - /search-by-day
       - /add-registration
       - /cancel-registration
-      - /rm-registration
 
   add-time-slot:
     text: |
