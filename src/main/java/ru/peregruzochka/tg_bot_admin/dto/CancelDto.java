@@ -2,21 +2,21 @@ package ru.peregruzochka.tg_bot_admin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.UUID;
 
+@Builder
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-public class TeacherDto {
+@ToString
+public class CancelDto {
     private UUID id;
-    private String name;
-    private UUID imageID;
+    private UUID registrationId;
+    private String caseDescription;
 }

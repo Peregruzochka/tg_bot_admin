@@ -7,6 +7,7 @@ attr:
       - Убрать окошко
       - Посмотреть занятия
       - Добавить занятие
+      - Отменить занятие
       - Убрать занятие
 
     callbacks:
@@ -14,6 +15,7 @@ attr:
       - /rm-time-slot
       - /search-by-day
       - /add-registration
+      - /cancel-registration
       - /rm-registration
 
   add-time-slot:
@@ -312,3 +314,62 @@ attr:
       <b>{1}, {2}</b>
       <b>Ребенок:</b> {3}(<i>{4}</i>)
       <b>Родитель:</b> {5}
+
+  cancel-reg-choose-day:
+    text: |
+      Выбери дату:
+    buttons:
+      - « Назад
+    callbacks:
+      - /start
+    week-days-names: [ Пн, Вт, Ср, Чт, Пт, Сб, Вс ]
+    navigate-callback: "/cancel-reg-navigate:"
+    navigate-next-button: »
+    navigate-back-button: «
+    empty-callback: /empty
+    choose-day-callback: "/cancel-reg-day:"
+    error-text: | 
+      <b>Нельзя отменять занятие которые уже прошли</b>
+      Выбери другую дату:
+
+  cancel-reg-choose-teacher:
+    text: |
+      Дата: {}
+      
+      Выбери преподавателя:
+    buttons:
+      - « Назад
+    callbacks:
+      - /cancel-reg-back-choose-date
+
+    cancel-reg-choose-teacher-callback: "/cancel-reg-choose-teacher:"
+
+  cancel-reg-choose-reg:
+    text: |
+      Дата: {0}
+      Педагог: {1}
+      
+      {2}
+
+    buttons:
+      - « Назад
+    callbacks:
+      - /cancel-reg-back-teacher-choose
+
+    registration-text: |
+      {0}, {1}
+      Ребенок: {2}({3})
+      Родитель: {4}
+
+    cancel-reg-callback: "/cancel-reg-id:"
+
+  finish-cancel-registration:
+    text: |
+      Занятие отменено
+    buttons:
+      - « Назад к выбору занятий
+      - « В главное меню
+    callbacks:
+      - /cancel-reg-back-choose
+      - /start
+

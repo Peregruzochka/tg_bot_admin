@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.peregruzochka.tg_bot_admin.dto.CancelDto;
 import ru.peregruzochka.tg_bot_admin.dto.LessonDto;
 import ru.peregruzochka.tg_bot_admin.dto.RegistrationDto;
 import ru.peregruzochka.tg_bot_admin.dto.TeacherDto;
@@ -56,4 +57,7 @@ public interface BotBackendClient {
 
     @GetMapping("/users/phone")
     UserDto getUserByPhone(@RequestParam(name = "phone") String phone);
+
+    @PostMapping("/cancellations")
+    CancelDto addCancel(@RequestBody CancelDto cancelDto);
 }
