@@ -371,3 +371,5 @@ attr:
       - /cancel-reg-back-choose
       - /start
 
+  auth-error-text: |
+    <b>⛔️ Вы не авторизованы! Без авторизации бот не сможет работать с вами. ⛔️</b>
