@@ -6,10 +6,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
 import ru.peregruzochka.tg_bot_admin.cache.TeacherDtoCache;
 import ru.peregruzochka.tg_bot_admin.cache.TimeSlotSaver;
+import ru.peregruzochka.tg_bot_admin.client.BotBackendClient;
+import ru.peregruzochka.tg_bot_admin.dto.TimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.handler.UpdateHandler;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -19,6 +22,7 @@ public class ChooseDayHandler implements UpdateHandler {
     private final TimeSlotSaver timeSlotSaver;
     private final ChooseHourAttribute chooseHourAttribute;
     private final TeacherDtoCache teacherDtoCache;
+    private final BotBackendClient botBackendClient;
 
     @Override
     public boolean isApplicable(Update update) {
@@ -34,9 +38,10 @@ public class ChooseDayHandler implements UpdateHandler {
 
         UUID teacherId = timeSlotSaver.getTimeSlotDto().getTeacherId();
         String teacherName = teacherDtoCache.get(teacherId).getName();
+        List<TimeSlotDto> timeSlots = botBackendClient.getTeacherTimeSlotsByDate(teacherId, localDate);
 
         bot.edit(
-                chooseHourAttribute.generateText(teacherName, localDate.toString()),
+                chooseHourAttribute.generateText(teacherName, localDate.toString(), timeSlots),
                 chooseHourAttribute.generateChooseHourMarkup(),
                 update
         );
