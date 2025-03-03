@@ -9,7 +9,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import ru.peregruzochka.tg_bot_admin.dto.TimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.handler.BaseAttribute;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -24,28 +23,42 @@ public class ChooseHourAttribute extends BaseAttribute {
     private String chooseHourCallback;
     private String chooseHourButtonText;
     private String exceptionText;
+    private String availableTimeslot;
+    private String notAvailableTimeslot;
 
-    public String generateTextAfterException(String teacherName, String date, List<TimeSlotDto> timeSlotDtos) {
-        StringBuilder timeSlotText = new StringBuilder();
-        int i = 1;
-        for (TimeSlotDto timeSlotDto : timeSlotDtos) {
-            String startTime = convertTime(timeSlotDto.getStartTime());
-            String endTime = convertTime(timeSlotDto.getEndTime());
-            timeSlotText.append(i++).append(". ").append(startTime).append(" - ").append(endTime).append("\n");
-        }
+    public String generateTextAfterException(String teacherName, String date, List<TimeSlotDto> timeSlots) {
+        String timeSlotList = convertToTimeList(timeSlots);
         return exceptionText
                 .replace("{0}", teacherName)
                 .replace("{1}", date)
-                .replace("{2}", timeSlotText.toString());
+                .replace("{2}", timeSlotList);
     }
 
-
-    public String generateText(String teacherName, String date) {
-        return super.getText().replace("{0}", teacherName).replace("{1}", date);
+    public String generateText(String teacherName, String date, List<TimeSlotDto> timeSlots) {
+        String timeSlotList = convertToTimeList(timeSlots);
+        return text
+                .replace("{0}", teacherName)
+                .replace("{1}", date)
+                .replace("{2}", timeSlotList);
     }
 
     public InlineKeyboardMarkup generateChooseHourMarkup() {
         return super.generateMarkup(generateChooseHourButtons());
+    }
+
+    private String convertToTimeList(List<TimeSlotDto> timeSlots) {
+        StringBuilder timeSlotText = new StringBuilder();
+        int i = 1;
+        for (TimeSlotDto timeSlotDto : timeSlots) {
+            String startTime = timeSlotDto.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm"));
+            String endTime = timeSlotDto.getEndTime().format(DateTimeFormatter.ofPattern("HH:mm"));
+            String timeSlotMark = timeSlotDto.isAvailable() ? availableTimeslot : notAvailableTimeslot;
+            timeSlotText.append(i++).append(". ")
+                    .append(startTime).append(" - ").append(endTime)
+                    .append(" ").append(timeSlotMark)
+                    .append("\n");
+        }
+        return timeSlotText.toString();
     }
 
     private List<List<InlineKeyboardButton>> generateChooseHourButtons() {
@@ -63,8 +76,4 @@ public class ChooseHourAttribute extends BaseAttribute {
         return chooseHourCallback + hour;
     }
 
-    private String convertTime(LocalDateTime localDateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        return localDateTime.format(formatter);
-    }
 }

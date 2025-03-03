@@ -41,10 +41,15 @@ attr:
 
   choose-hour:
     text: |
-      Выбери время начала занятия
-      
       Педагог: {0}
       Дата: {1}
+      Окошки:
+      {2}
+      
+      [v] - cвободные окошки
+      [x] - занятые окошки
+      
+      Выбери время начала окошка:
     buttons:
       - « Назад
     callbacks:
@@ -58,9 +63,15 @@ attr:
       
       Педагог: {0}
       Дата: {1}
-      
-      Время когда педагог может или будет проводить занятия:
+      Окошки:
       {2}
+      
+      [v] - cвободные окошки
+      [x] - занятые окошки
+      
+      Выбери время начала окошка:
+    available-timeslot: "[v]"
+    not-available-timeslot: "[x]"
 
   choose-minute:
     text: |
@@ -82,8 +93,11 @@ attr:
       
       Педагог: {0}
       Дата: {1}
-      
+      Окошки:
       {2}
+      
+      [v] - cвободные окошки
+      [x] - занятые окошки
     buttons:
       - Добавить еще одно занятие на эту дату
       - Добавить еще одно занятие на другую дату
@@ -92,6 +106,8 @@ attr:
       - /add-time-slot-that-date
       - /add-time-slot-other-date
       - /start
+    available-timeslot: "[v]"
+    not-available-timeslot: "[x]"
 
   choose-teacher-rm-time-slot:
     text: |
