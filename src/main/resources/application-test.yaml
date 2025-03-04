@@ -9,12 +9,13 @@ spring:
 
   data:
     redis:
-      host: localhost
-      port: 6378
+      host: ${SPRING_REDIS_HOST:localhost}
+      port: ${SPRING_REDIS_PORT:6378}
     redis-channel:
       new-registration: create-registration
       confirmed: confirmed
       cancel: cancel
+
 
 logging:
   level:
