@@ -1,18 +1,20 @@
+server:
+  port: 8082
+
 spring:
   config:
     import:
-      - "optional:classpath:bot.yaml"
+      - "optional:classpath:bot-prod.yaml"
       - "optional:classpath:attribute.yaml"
 
   data:
     redis:
-      host: ${SPRING_REDIS_HOST:localhost}
-      port: ${SPRING_REDIS_PORT:6378}
+      host: localhost
+      port: 6379
     redis-channel:
       new-registration: create-registration
       confirmed: confirmed
       cancel: cancel
-
 
 logging:
   level:
@@ -22,5 +24,5 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%level] %logger{36} - %msg%n"
 
 bot-backend:
-  host: http://localhost
+  host: http://192.168.31.103
   port: 8081
