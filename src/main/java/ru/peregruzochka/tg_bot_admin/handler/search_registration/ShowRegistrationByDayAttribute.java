@@ -44,13 +44,16 @@ public class ShowRegistrationByDayAttribute extends BaseAttribute {
         String childName = registrationDto.getChild().getName();
         String childBirthday = registrationDto.getChild().getBirthday();
         String parent = registrationDto.getUser().getName();
+        String phone = registrationDto.getUser().getPhone();
 
         return registrationPattern
                 .replace("{1}", time)
                 .replace("{2}", lesson)
                 .replace("{3}", childName)
                 .replace("{4}", childBirthday)
-                .replace("{5}", parent);
+                .replace("{5}", parent)
+                .replace("{6}", phone);
+
     }
 
     private String convertTimeToString(LocalDateTime startDate, LocalDateTime endDate) {
