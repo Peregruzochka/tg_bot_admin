@@ -19,5 +19,12 @@ public class UserDto {
     private Long telegramId;
     private String name;
     private String phone;
+    private UserStatus status;
     private List<ChildDto> children;
+
+    public enum UserStatus {
+        NEW,
+        REGULAR,
+        EDITING,
+    }
 }
