@@ -7,7 +7,8 @@ import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
 import ru.peregruzochka.tg_bot_admin.cache.LocalDateSaver;
 import ru.peregruzochka.tg_bot_admin.cache.TeacherDtoCache;
 import ru.peregruzochka.tg_bot_admin.cache.TeacherSaver;
-import ru.peregruzochka.tg_bot_admin.cache.TeacherTimeSlotPool;
+import ru.peregruzochka.tg_bot_admin.client.BotBackendClient;
+import ru.peregruzochka.tg_bot_admin.dto.GroupTimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.dto.TimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.handler.UpdateHandler;
 
@@ -19,30 +20,31 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DateRmHandler implements UpdateHandler {
     private final TelegramBot bot;
-    private final TeacherTimeSlotPool teacherTimeSlotPool;
     private final ChooseRmTimeSlotAttribute chooseRmTimeSlotAttribute;
     private final TeacherDtoCache teacherDtoCache;
     private final LocalDateSaver localDateSaver;
     private final TeacherSaver teacherSaver;
+    private final BotBackendClient botBackendClient;
 
     @Override
     public boolean isApplicable(Update update) {
-        return update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("/date-rm:");
+        return callbackStartWith(update, "/date-rm:");
     }
 
     @Override
     public void compute(Update update) {
-        LocalDate date = LocalDate.parse(update.getCallbackQuery().getData().replace("/date-rm:", ""));
+        LocalDate date = LocalDate.parse(getPayload(update, "/date-rm:"));
         UUID teacherId = teacherSaver.getTeacherId();
         String teacherName = teacherDtoCache.get(teacherId).getName();
-        List<TimeSlotDto> timeSlotsByDate = teacherTimeSlotPool.get(teacherId).stream()
-                .filter(slot -> slot.getStartTime().toLocalDate().equals(date))
-                .toList();
+
+        List<TimeSlotDto> timeslots = botBackendClient.getTeacherTimeSlotsByDate(teacherId, date);
+        List<GroupTimeSlotDto> groupTimeslots = botBackendClient.getTeacherGroupTimeSlotsByDate(teacherId, date);
+
         localDateSaver.setDate(date);
 
         bot.edit(
                 chooseRmTimeSlotAttribute.generateText(teacherName, date.toString()),
-                chooseRmTimeSlotAttribute.generateChooseRmTimeSlotMarkup(timeSlotsByDate),
+                chooseRmTimeSlotAttribute.generateChooseRmTimeSlotMarkup(timeslots, groupTimeslots),
                 update
         );
     }

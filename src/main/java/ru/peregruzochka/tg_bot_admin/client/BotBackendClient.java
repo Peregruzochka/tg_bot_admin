@@ -48,6 +48,12 @@ public interface BotBackendClient {
                                       @RequestParam("group-lesson-id") UUID groupLessonId,
                                       @RequestParam("start-time") LocalDateTime start);
 
+    @GetMapping("/group-timeslots/next-month-search")
+    List<GroupTimeSlotDto> getTeacherGroupTimeSlotInNextMonth(@RequestParam("teacher-id") UUID teacherId);
+
+    @DeleteMapping("/group-timeslots/{group-timeslot-id}")
+    void deleteGroupTimeSlot(@PathVariable("group-timeslot-id") UUID groupTimeslotId);
+
     @GetMapping("/group-timeslots/by-date")
     List<GroupTimeSlotDto> getTeacherGroupTimeSlotsByDate(@RequestParam("teacher-id") UUID teacherId, @RequestParam("date") LocalDate date);
 

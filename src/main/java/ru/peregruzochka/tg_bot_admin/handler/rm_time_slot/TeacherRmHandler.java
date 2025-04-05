@@ -6,8 +6,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
 import ru.peregruzochka.tg_bot_admin.cache.TeacherDtoCache;
 import ru.peregruzochka.tg_bot_admin.cache.TeacherSaver;
-import ru.peregruzochka.tg_bot_admin.cache.TeacherTimeSlotPool;
 import ru.peregruzochka.tg_bot_admin.client.BotBackendClient;
+import ru.peregruzochka.tg_bot_admin.dto.GroupTimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.dto.TimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.handler.UpdateHandler;
 
@@ -22,25 +22,26 @@ public class TeacherRmHandler implements UpdateHandler {
     private final BotBackendClient botBackendClient;
     private final ChooseDateRmTimeSlotAttribute chooseDateRmTimeSlotAttribute;
     private final TeacherDtoCache teacherDtoCache;
-    private final TeacherTimeSlotPool teacherTimeSlotPool;
     private final TeacherSaver teacherSaver;
 
     @Override
     public boolean isApplicable(Update update) {
-        return update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("/teacher-rm:");
+        return callbackStartWith(update, "/teacher-rm:");
     }
 
     @Override
     public void compute(Update update) {
-        UUID teacherId = UUID.fromString(update.getCallbackQuery().getData().replace("/teacher-rm:", ""));
+        UUID teacherId = UUID.fromString(getPayload(update, "/teacher-rm:"));
         String teacherName = teacherDtoCache.get(teacherId).getName();
-        List<TimeSlotDto> timeSlotDtoList = botBackendClient.getTeacherTimeSlotsInNextMonth(teacherId);
-        teacherTimeSlotPool.put(teacherId, timeSlotDtoList);
+
+        List<TimeSlotDto> timeslots = botBackendClient.getTeacherTimeSlotsInNextMonth(teacherId);
+        List<GroupTimeSlotDto> groupTimeslots = botBackendClient.getTeacherGroupTimeSlotInNextMonth(teacherId);
+
         teacherSaver.setTeacherId(teacherId);
 
         bot.edit(
                 chooseDateRmTimeSlotAttribute.generateText(teacherName),
-                chooseDateRmTimeSlotAttribute.generateChooseDateRmTimeSlot(timeSlotDtoList),
+                chooseDateRmTimeSlotAttribute.generateChooseDateRmTimeSlot(timeslots, groupTimeslots),
                 update
         );
     }

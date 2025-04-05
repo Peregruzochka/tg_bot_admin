@@ -7,11 +7,12 @@ import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
 import ru.peregruzochka.tg_bot_admin.cache.LocalDateSaver;
 import ru.peregruzochka.tg_bot_admin.cache.TeacherDtoCache;
 import ru.peregruzochka.tg_bot_admin.cache.TeacherSaver;
-import ru.peregruzochka.tg_bot_admin.cache.TeacherTimeSlotPool;
 import ru.peregruzochka.tg_bot_admin.client.BotBackendClient;
+import ru.peregruzochka.tg_bot_admin.dto.GroupTimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.dto.TimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.handler.UpdateHandler;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +21,6 @@ import java.util.UUID;
 public class TimeSlotRmHandler implements UpdateHandler {
     private final TelegramBot bot;
     private final BotBackendClient botBackendClient;
-    private final TeacherTimeSlotPool teacherTimeSlotPool;
     private final TeacherSaver teacherSaver;
     private final LocalDateSaver localDateSaver;
     private final ChooseRmTimeSlotAttribute chooseRmTimeSlotAttribute;
@@ -28,24 +28,30 @@ public class TimeSlotRmHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(Update update) {
-        return update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("/time-slot-rm:");
+        return callbackStartWith(update, "/time-slot-rm:")
+                || callbackStartWith(update, "/group-time-slot-rm:");
     }
 
     @Override
     public void compute(Update update) {
-        UUID timeSlotId = UUID.fromString(update.getCallbackQuery().getData().replace("/time-slot-rm:", ""));
-        botBackendClient.deleteTimeSlot(timeSlotId);
+        if (callbackStartWith(update, "/time-slot-rm:")) {
+            UUID timeSlotId = UUID.fromString(getPayload(update, "/time-slot-rm:"));
+            botBackendClient.deleteTimeSlot(timeSlotId);
+        } else if (callbackStartWith(update, "/group-time-slot-rm:")) {
+            UUID timeSlotId = UUID.fromString(getPayload(update, "/group-time-slot-rm:"));
+            botBackendClient.deleteGroupTimeSlot(timeSlotId);
+        }
+
         UUID teacherId = teacherSaver.getTeacherId();
         String teacherName = teacherDtoCache.get(teacherId).getName();
-        teacherTimeSlotPool.get(teacherId).removeIf(timeSlot -> timeSlot.getId().equals(timeSlotId));
+        LocalDate date = localDateSaver.getDate();
 
-        List<TimeSlotDto> timeSlotsByDate = teacherTimeSlotPool.get(teacherId).stream()
-                .filter(slot -> slot.getStartTime().toLocalDate().equals(localDateSaver.getDate()))
-                .toList();
+        List<TimeSlotDto> timeslots = botBackendClient.getTeacherTimeSlotsByDate(teacherId, date);
+        List<GroupTimeSlotDto> groupTimeslots = botBackendClient.getTeacherGroupTimeSlotsByDate(teacherId, date);
 
         bot.edit(
-                chooseRmTimeSlotAttribute.generateText(teacherName, localDateSaver.getDate().toString()),
-                chooseRmTimeSlotAttribute.generateChooseRmTimeSlotMarkup(timeSlotsByDate),
+                chooseRmTimeSlotAttribute.generateText(teacherName, date.toString()),
+                chooseRmTimeSlotAttribute.generateChooseRmTimeSlotMarkup(timeslots, groupTimeslots),
                 update
         );
     }

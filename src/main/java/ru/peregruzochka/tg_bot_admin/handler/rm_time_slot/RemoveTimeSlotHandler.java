@@ -21,7 +21,7 @@ public class RemoveTimeSlotHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(Update update) {
-        return update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("/rm-time-slot");
+        return hasCallback(update, "/rm-time-slot");
     }
 
     @Override

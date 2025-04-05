@@ -18,6 +18,8 @@ attr:
 
   add-time-slot:
     text: |
+      Добавление окошек
+      
       Выбери педагога
     buttons:
       - « Назад
@@ -40,7 +42,7 @@ attr:
     choose-day-callback: "/day:"
 
   choose-hour:
-    text: |
+    text: |      
       Педагог: {0}
       Дата: {1}
       Окошки:
@@ -145,7 +147,9 @@ attr:
 
   choose-teacher-rm-time-slot:
     text: |
-      Выбери педагога:
+      Удаление окошек
+      
+      Выбери педагога :
     buttons:
       - « Назад
     callbacks:
@@ -154,9 +158,9 @@ attr:
 
   choose-date-rm-time-slot:
     text: |
-      Выбери дату когда хочешь освободить время педагога
-      
       Педагог: {0}
+      
+      Выбери день, когда хочешь удалить окошки:
 
     buttons:
       - « Назад
@@ -166,16 +170,24 @@ attr:
 
   choose-rm-time-slot:
     text: |
-      Выбери время
-      
       Педагог: {0}
       Дата: {1}
+      
+      [i] - индивидуальное окошко
+      [g] - групповое окошко
+      
+      Выбери окошко:
+      <i>Выведен список только тех окошек, в которых нет занятий</i>
+
     buttons:
       - « Назад
     callbacks:
       - /choose-date-rm
-
     rm-time-slot-callback: "/time-slot-rm:"
+    rm-group-time-slot-callback: "/group-time-slot-rm:"
+    individual-label: "[i]"
+    group-label: "[g]"
+    button-text-pattern: "{0}. {1}-{2} {3}"
 
   new-registration-event:
     text: |
