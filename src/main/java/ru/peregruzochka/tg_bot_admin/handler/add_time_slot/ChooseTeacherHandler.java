@@ -22,12 +22,12 @@ public class ChooseTeacherHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(Update update) {
-        return update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("/teacher:");
+        return callbackStartWith(update, "/teacher:");
     }
 
     @Override
     public void compute(Update update) {
-        UUID teacherId = UUID.fromString(update.getCallbackQuery().getData().replace("/teacher:", ""));
+        UUID teacherId = UUID.fromString(getPayload(update, "/teacher:"));
         TimeSlotDto timeSlotDto = new TimeSlotDto();
         timeSlotDto.setTeacherId(teacherId);
         timeSlotSaver.setTimeSlotDto(timeSlotDto);

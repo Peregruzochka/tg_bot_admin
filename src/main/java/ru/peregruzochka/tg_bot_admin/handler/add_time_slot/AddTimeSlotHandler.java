@@ -21,7 +21,7 @@ public class AddTimeSlotHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(Update update) {
-        return update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("/add-time-slot");
+        return hasCallback(update, "/add-time-slot");
     }
 
     @Override

@@ -7,6 +7,7 @@ import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
 import ru.peregruzochka.tg_bot_admin.cache.TeacherDtoCache;
 import ru.peregruzochka.tg_bot_admin.cache.TimeSlotSaver;
 import ru.peregruzochka.tg_bot_admin.client.BotBackendClient;
+import ru.peregruzochka.tg_bot_admin.dto.GroupTimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.dto.TimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.handler.UpdateHandler;
 
@@ -39,9 +40,10 @@ public class ChooseDayHandler implements UpdateHandler {
         UUID teacherId = timeSlotSaver.getTimeSlotDto().getTeacherId();
         String teacherName = teacherDtoCache.get(teacherId).getName();
         List<TimeSlotDto> timeSlots = botBackendClient.getTeacherTimeSlotsByDate(teacherId, localDate);
+        List<GroupTimeSlotDto> groupTimeSlots = botBackendClient.getTeacherGroupTimeSlotsByDate(teacherId, localDate);
 
         bot.edit(
-                chooseHourAttribute.generateText(teacherName, localDate.toString(), timeSlots),
+                chooseHourAttribute.generateText(teacherName, localDate.toString(), timeSlots, groupTimeSlots),
                 chooseHourAttribute.generateChooseHourMarkup(),
                 update
         );

@@ -28,7 +28,7 @@ public class ChooseHourHandler implements UpdateHandler {
     @Override
     public void compute(Update update) {
         int hour = Integer.parseInt(update.getCallbackQuery().getData().replace("/hour:", ""));
-        LocalDateTime startTime = timeSlotSaver.getTimeSlotDto().getStartTime();
+        LocalDateTime startTime = timeSlotSaver.getTimeSlotDto().getStartTime().toLocalDate().atStartOfDay();
         startTime = startTime.plusHours(hour);
         timeSlotSaver.getTimeSlotDto().setStartTime(startTime);
 

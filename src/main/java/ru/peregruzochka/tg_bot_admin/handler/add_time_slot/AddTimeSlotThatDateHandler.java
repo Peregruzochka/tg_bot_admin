@@ -7,6 +7,7 @@ import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
 import ru.peregruzochka.tg_bot_admin.cache.TeacherDtoCache;
 import ru.peregruzochka.tg_bot_admin.cache.TimeSlotSaver;
 import ru.peregruzochka.tg_bot_admin.client.BotBackendClient;
+import ru.peregruzochka.tg_bot_admin.dto.GroupTimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.dto.TimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.handler.UpdateHandler;
 
@@ -36,9 +37,10 @@ public class AddTimeSlotThatDateHandler implements UpdateHandler {
         String teacherName = teacherDtoCache.get(teacherId).getName();
 
         List<TimeSlotDto> timeSlots = botBackendClient.getTeacherTimeSlotsByDate(teacherId, date.toLocalDate());
+        List<GroupTimeSlotDto> groupTimeSlots = botBackendClient.getTeacherGroupTimeSlotsByDate(teacherId, date.toLocalDate());
 
         bot.send(
-                chooseHourAttribute.generateText(teacherName, date.toLocalDate().toString(), timeSlots),
+                chooseHourAttribute.generateText(teacherName, date.toLocalDate().toString(), timeSlots, groupTimeSlots),
                 chooseHourAttribute.generateChooseHourMarkup(),
                 update
         );

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.peregruzochka.tg_bot_admin.dto.CancelDto;
+import ru.peregruzochka.tg_bot_admin.dto.GroupLessonDto;
+import ru.peregruzochka.tg_bot_admin.dto.GroupTimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.dto.LessonDto;
 import ru.peregruzochka.tg_bot_admin.dto.RegistrationDto;
 import ru.peregruzochka.tg_bot_admin.dto.TeacherDto;
@@ -16,6 +18,7 @@ import ru.peregruzochka.tg_bot_admin.dto.TimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.dto.UserDto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,14 +37,25 @@ public interface BotBackendClient {
     @GetMapping("/timeslots/next-month-search")
     List<TimeSlotDto> getTeacherTimeSlotsInNextMonth(@RequestParam("teacher-id") UUID teacherId);
 
-    @DeleteMapping("timeslots/{timeslot-id}")
+    @DeleteMapping("/timeslots/{timeslot-id}")
     void deleteTimeSlot(@PathVariable("timeslot-id") UUID timeslotId);
 
-    @GetMapping("timeslots/{timeslot-id}")
+    @GetMapping("/timeslots/{timeslot-id}")
     TimeSlotDto getTimeSlot(@PathVariable("timeslot-id") UUID timeslotId);
+
+    @PostMapping("/group-timeslots")
+    GroupTimeSlotDto addGroupTimeSlot(@RequestParam("teacher-id") UUID teacherId,
+                                      @RequestParam("group-lesson-id") UUID groupLessonId,
+                                      @RequestParam("start-time") LocalDateTime start);
+
+    @GetMapping("/group-timeslots/by-date")
+    List<GroupTimeSlotDto> getTeacherGroupTimeSlotsByDate(@RequestParam("teacher-id") UUID teacherId, @RequestParam("date") LocalDate date);
 
     @GetMapping("/teachers")
     List<TeacherDto> getAllTeachers();
+
+    @GetMapping("/teachers/group-teachers")
+    List<TeacherDto> getGroupTeacher();
 
     @GetMapping("/registrations/search-today")
     List<RegistrationDto> getAllRegistrationsByToday();
@@ -54,6 +68,9 @@ public interface BotBackendClient {
 
     @GetMapping("/lessons/all")
     List<LessonDto> getAllLessons();
+
+    @GetMapping("/group-lessons/by-teacher")
+    List<GroupLessonDto> getGroupLessonsByTeacher(@RequestParam(name = "teacher-id") UUID teacherId);
 
     @GetMapping("/users/phone")
     UserDto getUserByPhone(@RequestParam(name = "phone") String phone);

@@ -48,6 +48,7 @@ attr:
       
       [v] - cвободные окошки
       [x] - занятые окошки
+      [x/y] - групповые занятия 
       
       Выбери время начала окошка:
     buttons:
@@ -59,7 +60,7 @@ attr:
     choose-hour-callback: "/hour:"
     choose-hour-button-text: "{0}:00 - {1}:00"
     exception-text: |
-      <b>Выбери корректное время</b>
+      <b>⚠️Время выбрано неверно</b>
       
       Педагог: {0}
       Дата: {1}
@@ -68,10 +69,14 @@ attr:
       
       [v] - cвободные окошки
       [x] - занятые окошки
+      [x/y] - групповые окошки 
       
       Выбери время начала окошка:
     available-timeslot: "[v]"
     not-available-timeslot: "[x]"
+    group-timeslot: "[{0}/{1}]"
+    line-pattern: |
+      {0}. {1} - {2} {3}
 
   choose-minute:
     text: |
@@ -87,6 +92,31 @@ attr:
     end-minute: 60
     choose-minute-callback: "/minute:"
 
+  choose-timeslot-type:
+    text: |
+      Выбери тип занятия:
+    buttons:
+      - Индивидуальное
+      - Групповое
+      - Назад
+    callbacks:
+      - /individual
+      - /group
+      - /back-choose-minute
+
+  choose-group-lesson:
+    text: |
+      Педагог: {0}
+      Дата: {1}
+      Время: {2}
+       
+      Выбери групповое занятие:
+    buttons:
+      - Назад
+    callbacks:
+      - /back-choose-timeslot-type
+    group-lesson-callback: "/choose-group-lesson:"
+
   view-time-slot:
     text: |
       Информация о свободном времени
@@ -98,6 +128,7 @@ attr:
       
       [v] - cвободные окошки
       [x] - занятые окошки
+      [x/y] - групповые окошки
     buttons:
       - Добавить еще одно занятие на эту дату
       - Добавить еще одно занятие на другую дату
@@ -108,6 +139,9 @@ attr:
       - /start
     available-timeslot: "[v]"
     not-available-timeslot: "[x]"
+    group-timeslot: "[{0}/{1}]"
+    line-pattern: |
+      {0}. {1} - {2} {3}
 
   choose-teacher-rm-time-slot:
     text: |
