@@ -13,8 +13,10 @@ spring:
       port: ${SPRING_REDIS_PORT:6377}
     redis-channel:
       new-registration: create-registration
+      new-group-registration: create-group-registration
       confirmed: confirmed
       cancel: cancel
+      group-cancel: group-cancel
 
 
 logging:

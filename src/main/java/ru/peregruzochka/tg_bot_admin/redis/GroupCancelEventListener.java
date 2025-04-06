@@ -1,0 +1,32 @@
+package ru.peregruzochka.tg_bot_admin.redis;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.connection.Message;
+import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.stereotype.Component;
+import ru.peregruzochka.tg_bot_admin.dto.GroupCancelEvent;
+import ru.peregruzochka.tg_bot_admin.sender.GroupCancelEventSender;
+
+@Component
+@Slf4j
+@RequiredArgsConstructor
+public class GroupCancelEventListener implements MessageListener {
+
+    private final GroupCancelEventSender cancelEventSender;
+    private final ObjectMapper objectMapper;
+
+    @Override
+    public void onMessage(Message message, byte[] pattern) {
+        String messageBody = new String(message.getBody());
+        log.info("Group cancel event received: {}", messageBody);
+        try {
+            GroupCancelEvent cancelEvent = objectMapper.readValue(messageBody, GroupCancelEvent.class);
+            cancelEventSender.send(cancelEvent);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}

@@ -10,6 +10,8 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import ru.peregruzochka.tg_bot_admin.redis.CancelEventListener;
 import ru.peregruzochka.tg_bot_admin.redis.ConfirmRegistrationEventListener;
+import ru.peregruzochka.tg_bot_admin.redis.GroupCancelEventListener;
+import ru.peregruzochka.tg_bot_admin.redis.NewGroupRegistrationEventListener;
 import ru.peregruzochka.tg_bot_admin.redis.NewRegistrationEventListener;
 
 @Configuration
@@ -18,6 +20,8 @@ public class RedisConfig {
     private final NewRegistrationEventListener newRegistrationEventListener;
     private final ConfirmRegistrationEventListener confirmRegistrationEventListener;
     private final CancelEventListener cancelEventListener;
+    private final NewGroupRegistrationEventListener newGroupRegistrationEventListener;
+    private final GroupCancelEventListener groupCancelEventListener;
 
     @Value("${spring.data.redis-channel.new-registration}")
     private String newRegistrationChannel;
@@ -27,6 +31,12 @@ public class RedisConfig {
 
     @Value("${spring.data.redis-channel.cancel}")
     private String cancelChannel;
+
+    @Value("${spring.data.redis-channel.new-group-registration}")
+    private String newGroupRegistrationChannel;
+
+    @Value("${spring.data.redis-channel.group-cancel}")
+    private String groupCancelChannel;
 
     @Bean
     public RedisMessageListenerContainer redisContainer(RedisConnectionFactory redisConnectionFactory) {
@@ -46,6 +56,16 @@ public class RedisConfig {
         container.addMessageListener(
                 new MessageListenerAdapter(cancelEventListener),
                 new ChannelTopic(cancelChannel)
+        );
+
+        container.addMessageListener(
+                new MessageListenerAdapter(newGroupRegistrationEventListener),
+                new ChannelTopic(newGroupRegistrationChannel)
+        );
+
+        container.addMessageListener(
+                new MessageListenerAdapter(groupCancelEventListener),
+                new ChannelTopic(groupCancelChannel)
         );
 
         return container;
