@@ -34,8 +34,8 @@ public interface BotBackendClient {
     @GetMapping("/timeslots/available-by-date")
     List<TimeSlotDto> getTeacherAvailableTimeSlotsByDate(@RequestParam("teacher-id") UUID teacherId, @RequestParam LocalDate date);
 
-    @GetMapping("/timeslots/next-month-search")
-    List<TimeSlotDto> getTeacherTimeSlotsInNextMonth(@RequestParam("teacher-id") UUID teacherId);
+    @GetMapping("/timeslots/available-next-month-search")
+    List<TimeSlotDto> getTeacherAvailableTimeSlotsInNextMonth(@RequestParam("teacher-id") UUID teacherId);
 
     @DeleteMapping("/timeslots/{timeslot-id}")
     void deleteTimeSlot(@PathVariable("timeslot-id") UUID timeslotId);

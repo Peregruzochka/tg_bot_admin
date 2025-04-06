@@ -34,7 +34,7 @@ public class TeacherRmHandler implements UpdateHandler {
         UUID teacherId = UUID.fromString(getPayload(update, "/teacher-rm:"));
         String teacherName = teacherDtoCache.get(teacherId).getName();
 
-        List<TimeSlotDto> timeslots = botBackendClient.getTeacherTimeSlotsInNextMonth(teacherId);
+        List<TimeSlotDto> timeslots = botBackendClient.getTeacherAvailableTimeSlotsInNextMonth(teacherId);
         List<GroupTimeSlotDto> groupTimeslots = botBackendClient.getTeacherGroupTimeSlotInNextMonth(teacherId);
 
         teacherSaver.setTeacherId(teacherId);

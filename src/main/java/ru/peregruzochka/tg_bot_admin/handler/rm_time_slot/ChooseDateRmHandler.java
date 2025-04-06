@@ -33,7 +33,7 @@ public class ChooseDateRmHandler implements UpdateHandler {
     public void compute(Update update) {
         UUID teacherId = teacherSaver.getTeacherId();
         String teacherName = teacherDtoCache.get(teacherId).getName();
-        List<TimeSlotDto> timeslots = botBackendClient.getTeacherTimeSlotsInNextMonth(teacherId);
+        List<TimeSlotDto> timeslots = botBackendClient.getTeacherAvailableTimeSlotsInNextMonth(teacherId);
         List<GroupTimeSlotDto> groupTimeslots = botBackendClient.getTeacherGroupTimeSlotInNextMonth(teacherId);
 
         bot.edit(
