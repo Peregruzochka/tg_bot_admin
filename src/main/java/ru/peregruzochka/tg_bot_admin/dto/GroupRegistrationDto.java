@@ -6,23 +6,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
-
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-public class ChildDto {
+public class GroupRegistrationDto {
     private UUID id;
-    private String name;
-    private String birthday;
-    private ChildStatus status;
-
-    public enum ChildStatus {
-        NEW,
-        REGULAR,
-        EDITING,
-    }
+    private ChildDto child;
+    private UserDto user;
+    private GroupTimeSlotDto timeSlot;
+    private LocalDateTime createdAt;
 }

@@ -270,6 +270,11 @@ attr:
     text: |
       Дата: {0}
       Педагог: {1}
+      
+      {2}
+      
+      [i] - индивидуальное занятие
+      [g] - групповое занятие
 
       <i>Выбери время:</i>
     buttons:
@@ -277,6 +282,12 @@ attr:
     callbacks:
       - /add-reg-choose-teacher
     choose-timeslot-callback: "/add-reg-timeslot:"
+    choose-group-timeslot-callback: "/add-reg-group-timeslot:"
+    individual-reg-pattern-text: |
+      [i] {}
+    group-reg-pattern-text: |
+      [g] {0} [{1}/{2}]
+      <i>{3}</i>
 
   add-reg-choose-lessons:
     text: |
@@ -309,6 +320,29 @@ attr:
       
       {}
 
+  add-reg-group-input-user-phone:
+    text: |
+      Дата: {0}
+      Время: {1}
+      Педагог: {2}
+      Направление: {3} [{4}/{5}]
+      
+      <i>Введи номер телефона клиента:</i>
+    buttons:
+      - « Назад
+    callbacks:
+      - /add-reg-choose-timeslot
+
+    wrong-number-text: |
+      <b>Введен некорректный номер! Введи номер еще раз</b>
+      
+      {}
+
+    wrong-user-text: |
+      <b>Пользователя с таким номером нет! Введи номер еще раз</b>
+      
+      {}
+
   add-reg-finish-attribute:
     text: |
       Дата: {0}
@@ -333,6 +367,33 @@ attr:
       - /add-reg-input-user-phone-back
 
     info-about-req-input: <b>введи данные</b>
+
+  add-reg-group-finish-attribute:
+    text: |
+      Дата: {0}
+      Время: {1}
+      Педагог: {2}
+      Направление: {3} [{8}/{9}]
+      Клиент: {4} ({5})
+      Ребенок: {6} (<i>{7}</i>)
+      
+      <i>Все данные верны?</i>
+    buttons:
+      - Да
+      - « Назад
+    callbacks:
+      - /add-reg-group-send-to-backend
+      - /add-reg-group-input-user-phone-back
+
+    change-child-button: Изменить ребенка
+    change-child-callback: /group-change-child
+
+  add-reg-group-change-child:
+    text: |
+      Выбери ребенка:
+    buttons:
+    callbacks:
+    child-callback: "/add-reg-group-select-child:"
 
   add-reg-input-user-name:
     text: |

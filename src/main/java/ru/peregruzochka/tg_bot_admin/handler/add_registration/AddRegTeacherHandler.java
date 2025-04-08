@@ -7,6 +7,7 @@ import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
 import ru.peregruzochka.tg_bot_admin.cache.RegistrationDtoSaver;
 import ru.peregruzochka.tg_bot_admin.cache.TeacherDtoCache;
 import ru.peregruzochka.tg_bot_admin.client.BotBackendClient;
+import ru.peregruzochka.tg_bot_admin.dto.GroupTimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.dto.TeacherDto;
 import ru.peregruzochka.tg_bot_admin.dto.TimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.handler.UpdateHandler;
@@ -26,22 +27,23 @@ public class AddRegTeacherHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(Update update) {
-        return update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("/add-reg-teacher:");
+        return callbackStartWith(update, "/add-reg-teacher:");
     }
 
     @Override
     public void compute(Update update) {
-        UUID teacherId = UUID.fromString(update.getCallbackQuery().getData().replace("/add-reg-teacher:", ""));
+        UUID teacherId = UUID.fromString(getPayload(update, "/add-reg-teacher:"));
 
         TeacherDto teacher = teacherDtoCache.get(teacherId);
         registrationDtoSaver.getRegistrationDto().setTeacher(teacher);
 
         LocalDate date = registrationDtoSaver.getRegistrationDto().getSlot().getStartTime().toLocalDate();
-        List<TimeSlotDto> timeSlotDtoList = botBackendClient.getTeacherAvailableTimeSlotsByDate(teacherId, date);
+        List<TimeSlotDto> timeslots = botBackendClient.getTeacherAvailableTimeSlotsByDate(teacherId, date);
+        List<GroupTimeSlotDto> groupTimeslots = botBackendClient.getAvailableGroupTimeSlotsByDate(teacherId, date);
 
         telegramBot.edit(
-                addRegChooseTimeSlotAttribute.generateText(registrationDtoSaver.getRegistrationDto()),
-                addRegChooseTimeSlotAttribute.generateChooseTimeSlotMarkup(timeSlotDtoList),
+                addRegChooseTimeSlotAttribute.generateText(date.toString(), teacher.getName(), timeslots, groupTimeslots),
+                addRegChooseTimeSlotAttribute.generateChooseTimeSlotMarkup(timeslots, groupTimeslots),
                 update
         );
     }

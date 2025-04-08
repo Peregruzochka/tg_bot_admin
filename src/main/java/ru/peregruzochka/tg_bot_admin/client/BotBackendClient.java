@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.peregruzochka.tg_bot_admin.dto.CancelDto;
 import ru.peregruzochka.tg_bot_admin.dto.GroupLessonDto;
+import ru.peregruzochka.tg_bot_admin.dto.GroupRegistrationDto;
 import ru.peregruzochka.tg_bot_admin.dto.GroupTimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.dto.LessonDto;
 import ru.peregruzochka.tg_bot_admin.dto.RegistrationDto;
@@ -51,6 +52,13 @@ public interface BotBackendClient {
     @GetMapping("/group-timeslots/next-month-search")
     List<GroupTimeSlotDto> getTeacherGroupTimeSlotInNextMonth(@RequestParam("teacher-id") UUID teacherId);
 
+    @GetMapping("/group-timeslots/available-by-date")
+    List<GroupTimeSlotDto> getAvailableGroupTimeSlotsByDate(@RequestParam("teacher-id") UUID teacherId,
+                                                            @RequestParam("date") LocalDate date);
+
+    @GetMapping("/group-timeslots/{group-timeslot-id}")
+    GroupTimeSlotDto getGroupTimeSlot(@PathVariable("group-timeslot-id") UUID groupTimeslotId);
+
     @DeleteMapping("/group-timeslots/{group-timeslot-id}")
     void deleteGroupTimeSlot(@PathVariable("group-timeslot-id") UUID groupTimeslotId);
 
@@ -71,6 +79,9 @@ public interface BotBackendClient {
 
     @PostMapping("/registrations")
     RegistrationDto addRegistration(@RequestBody RegistrationDto registrationDto);
+
+    @PostMapping("/group-registrations")
+    GroupRegistrationDto addGroupRegistration(@RequestBody GroupRegistrationDto groupRegistrationDto);
 
     @GetMapping("/lessons/all")
     List<LessonDto> getAllLessons();

@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
 import ru.peregruzochka.tg_bot_admin.cache.RegistrationDtoSaver;
 import ru.peregruzochka.tg_bot_admin.client.BotBackendClient;
+import ru.peregruzochka.tg_bot_admin.dto.GroupTimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.dto.TimeSlotDto;
 import ru.peregruzochka.tg_bot_admin.handler.UpdateHandler;
 
@@ -32,10 +33,14 @@ public class AddRegChooseTimeslotHandler implements UpdateHandler {
         UUID teacherId = registrationDtoSaver.getRegistrationDto().getTeacher().getId();
 
         List<TimeSlotDto> timeslots = botBackendClient.getTeacherAvailableTimeSlotsByDate(teacherId, localDate);
+        List<GroupTimeSlotDto> groupTimeSlots = botBackendClient.getAvailableGroupTimeSlotsByDate(teacherId, localDate);
+
+        String teacherName = registrationDtoSaver.getRegistrationDto().getTeacher().getName();
+        String date = localDate.toString();
 
         telegramBot.edit(
-                addRegChooseTimeSlotAttribute.generateText(registrationDtoSaver.getRegistrationDto()),
-                addRegChooseTimeSlotAttribute.generateChooseTimeSlotMarkup(timeslots),
+                addRegChooseTimeSlotAttribute.generateText(date, teacherName, timeslots, groupTimeSlots),
+                addRegChooseTimeSlotAttribute.generateChooseTimeSlotMarkup(timeslots, groupTimeSlots),
                 update
         );
     }
