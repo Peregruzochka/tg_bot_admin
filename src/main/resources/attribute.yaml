@@ -442,6 +442,10 @@ attr:
     choose-day-callback: "/search-by-day-day:"
 
   show-reg-by-day:
+    text: |
+      Дата: {0}
+      
+      {1}
     buttons:
       - « Назад
     callbacks:
@@ -457,6 +461,13 @@ attr:
       <b>{1}, {2}</b>
       <b>Ребенок:</b> {3}(<i>{4}</i>)
       <b>Родитель:</b> {5} {6}
+
+    group-slot-pattern: |
+      <b>{1}, {2}</b> [{3}/{4}]
+    group-registration-pattern: | 
+      > <b>Ребенок</b>: {0}<i>({1})</i>
+        Родитель: {2} {3}
+      
 
   cancel-reg-choose-day:
     text: |

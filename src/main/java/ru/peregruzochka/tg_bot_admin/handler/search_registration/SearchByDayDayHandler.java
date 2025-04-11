@@ -5,14 +5,12 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
 import ru.peregruzochka.tg_bot_admin.client.BotBackendClient;
+import ru.peregruzochka.tg_bot_admin.dto.GroupRegistrationDto;
 import ru.peregruzochka.tg_bot_admin.dto.RegistrationDto;
 import ru.peregruzochka.tg_bot_admin.handler.UpdateHandler;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -24,22 +22,19 @@ public class SearchByDayDayHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(Update update) {
-        return update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("/search-by-day-day:");
+        return callbackStartWith(update, "/search-by-day-day:");
     }
 
     @Override
     public void compute(Update update) {
-        String day = update.getCallbackQuery().getData().replace("/search-by-day-day:", "");
+        String day = getPayload(update, "/search-by-day-day:");
         LocalDate localDate = LocalDate.parse(day);
 
-        List<RegistrationDto> registrations = botBackendClient.getAllRegistrationsByDate(localDate);
-        Map<String, List<RegistrationDto>> registrationsByTeacherId =
-                registrations.stream()
-                        .sorted(Comparator.comparing(reg -> reg.getSlot().getStartTime()))
-                        .collect(Collectors.groupingBy(reg -> reg.getTeacher().getName()));
+        List<RegistrationDto> registrations = botBackendClient.getAllActualRegistrationsByDate(localDate);
+        List<GroupRegistrationDto> groupRegistrations = botBackendClient.getAllActualGroupRegistrationsByDate(localDate);
 
         telegramBot.edit(
-                showRegistrationByDayAttribute.generateText(registrationsByTeacherId, localDate),
+                showRegistrationByDayAttribute.generateText(localDate, registrations, groupRegistrations),
                 showRegistrationByDayAttribute.createMarkup(),
                 update
         );

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
-import ru.peregruzochka.tg_bot_admin.cache.CancelRegistrationPool;
 import ru.peregruzochka.tg_bot_admin.cache.LocalDateSaver;
 import ru.peregruzochka.tg_bot_admin.client.BotBackendClient;
 import ru.peregruzochka.tg_bot_admin.dto.GroupRegistrationDto;
