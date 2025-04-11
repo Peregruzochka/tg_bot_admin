@@ -9,6 +9,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import ru.peregruzochka.tg_bot_admin.redis.CancelEventListener;
+import ru.peregruzochka.tg_bot_admin.redis.ConfirmGroupRegistrationEventListener;
 import ru.peregruzochka.tg_bot_admin.redis.ConfirmRegistrationEventListener;
 import ru.peregruzochka.tg_bot_admin.redis.GroupCancelEventListener;
 import ru.peregruzochka.tg_bot_admin.redis.NewGroupRegistrationEventListener;
@@ -19,6 +20,7 @@ import ru.peregruzochka.tg_bot_admin.redis.NewRegistrationEventListener;
 public class RedisConfig {
     private final NewRegistrationEventListener newRegistrationEventListener;
     private final ConfirmRegistrationEventListener confirmRegistrationEventListener;
+    private final ConfirmGroupRegistrationEventListener confirmGroupRegistrationEventListener;
     private final CancelEventListener cancelEventListener;
     private final NewGroupRegistrationEventListener newGroupRegistrationEventListener;
     private final GroupCancelEventListener groupCancelEventListener;
@@ -28,6 +30,9 @@ public class RedisConfig {
 
     @Value("${spring.data.redis-channel.confirmed}")
     private String confirmRegistrationChannel;
+
+    @Value("${spring.data.redis-channel.group-confirmed}")
+    private String confirmGroupRegistrationChannel;
 
     @Value("${spring.data.redis-channel.cancel}")
     private String cancelChannel;
@@ -51,6 +56,11 @@ public class RedisConfig {
         container.addMessageListener(
                 new MessageListenerAdapter(confirmRegistrationEventListener),
                 new ChannelTopic(confirmRegistrationChannel)
+        );
+
+        container.addMessageListener(
+                new MessageListenerAdapter(confirmGroupRegistrationEventListener),
+                new ChannelTopic(confirmGroupRegistrationChannel)
         );
 
         container.addMessageListener(
