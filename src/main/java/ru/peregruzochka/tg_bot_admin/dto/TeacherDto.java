@@ -9,9 +9,12 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class TeacherDto {
     private UUID id;
     private String name;
+    @EqualsAndHashCode.Exclude
     private UUID imageID;
+    @EqualsAndHashCode.Exclude
     private boolean hidden;
 }

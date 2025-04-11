@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.peregruzochka.tg_bot_admin.dto.CancelDto;
+import ru.peregruzochka.tg_bot_admin.dto.GroupCancelDto;
 import ru.peregruzochka.tg_bot_admin.dto.GroupLessonDto;
 import ru.peregruzochka.tg_bot_admin.dto.GroupRegistrationDto;
 import ru.peregruzochka.tg_bot_admin.dto.GroupTimeSlotDto;
@@ -77,12 +78,25 @@ public interface BotBackendClient {
     @GetMapping("/registrations/search-by-date")
     List<RegistrationDto> getAllRegistrationsByDate(@RequestParam("date") LocalDate date);
 
+    @GetMapping("/registrations/search-actual-by-date")
+    List<RegistrationDto> getAllActualRegistrationsByDate(@RequestParam("date") LocalDate date);
+
+    @GetMapping("/registrations/search-actual-by-teacher-by-date")
+    List<RegistrationDto> getAllActualRegistrationsByTeacherByDate(@RequestParam("teacher-id") UUID teacherId,
+                                                                   @RequestParam("date") LocalDate date);
+
     @PostMapping("/registrations")
     RegistrationDto addRegistration(@RequestBody RegistrationDto registrationDto);
 
     @PostMapping("/group-registrations")
     GroupRegistrationDto addGroupRegistration(@RequestBody GroupRegistrationDto groupRegistrationDto);
 
+    @GetMapping("/group-registrations/search-actual-by-date")
+    List<GroupRegistrationDto> getAllActualGroupRegistrationsByDate(@RequestParam("date") LocalDate date);
+
+    @GetMapping("/group-registrations/search-actual-by-teacher-by-date")
+    List<GroupRegistrationDto> getAllActualGroupRegistrationsByTeacherByDate(@RequestParam("teacher-id") UUID teacherId,
+                                                                             @RequestParam("date") LocalDate date);
     @GetMapping("/lessons/all")
     List<LessonDto> getAllLessons();
 
@@ -94,4 +108,8 @@ public interface BotBackendClient {
 
     @PostMapping("/cancellations")
     CancelDto addCancel(@RequestBody CancelDto cancelDto);
+
+    @PostMapping("/group-cancellations")
+    GroupCancelDto addGroupCancel(@RequestParam("group-registration-id") UUID registrationId,
+                                  @RequestParam("case") String caseDescription);
 }

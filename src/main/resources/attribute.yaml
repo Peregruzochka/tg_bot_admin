@@ -493,7 +493,6 @@ attr:
       Педагог: {1}
       
       {2}
-
     buttons:
       - « Назад
     callbacks:
@@ -503,8 +502,9 @@ attr:
       {0}, {1}
       Ребенок: {2}({3})
       Родитель: {4}
-
+    cancel-reg-button: "{0} ({1})"
     cancel-reg-callback: "/cancel-reg-id:"
+    cancel-group-reg-callback: "/cancel-group-reg-id:"
 
   finish-cancel-registration:
     text: |

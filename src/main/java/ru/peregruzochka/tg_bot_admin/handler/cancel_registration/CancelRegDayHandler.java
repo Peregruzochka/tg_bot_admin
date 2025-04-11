@@ -7,14 +7,12 @@ import ru.peregruzochka.tg_bot_admin.bot.TelegramBot;
 import ru.peregruzochka.tg_bot_admin.cache.CancelRegistrationPool;
 import ru.peregruzochka.tg_bot_admin.cache.LocalDateSaver;
 import ru.peregruzochka.tg_bot_admin.client.BotBackendClient;
+import ru.peregruzochka.tg_bot_admin.dto.GroupRegistrationDto;
 import ru.peregruzochka.tg_bot_admin.dto.RegistrationDto;
-import ru.peregruzochka.tg_bot_admin.dto.TeacherDto;
 import ru.peregruzochka.tg_bot_admin.handler.UpdateHandler;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import static ru.peregruzochka.tg_bot_admin.dto.RegistrationDto.RegistrationType.CANCEL;
 
 
 @Component
@@ -23,7 +21,6 @@ public class CancelRegDayHandler implements UpdateHandler {
     private final TelegramBot telegramBot;
     private final CancelRegChooseDayAttribute cancelRegChooseDayAttribute;
     private final BotBackendClient botBackendClient;
-    private final CancelRegistrationPool cancelRegistrationPool;
     private final CancelRegChooseTeacherAttribute cancelRegChooseTeacherAttribute;
     private final LocalDateSaver localDateSaver;
 
@@ -47,21 +44,12 @@ public class CancelRegDayHandler implements UpdateHandler {
         }
 
         else {
-            List<RegistrationDto> registrationsByDate = botBackendClient.getAllRegistrationsByDate(localDate);
-            List<RegistrationDto> activeRegistration = registrationsByDate.stream()
-                    .filter(registrationDto -> registrationDto.getType() != CANCEL)
-                    .toList();
-
-            cancelRegistrationPool.setRegistrations(activeRegistration);
-
-            List<TeacherDto> teachers = activeRegistration.stream()
-                    .map(RegistrationDto::getTeacher)
-                    .distinct()
-                    .toList();
+            List<RegistrationDto> registrations = botBackendClient.getAllActualRegistrationsByDate(localDate);
+            List<GroupRegistrationDto> groupRegistrations = botBackendClient.getAllActualGroupRegistrationsByDate(localDate);
 
             telegramBot.edit(
                     cancelRegChooseTeacherAttribute.generateText(localDate),
-                    cancelRegChooseTeacherAttribute.generateChooseTeacher(teachers),
+                    cancelRegChooseTeacherAttribute.generateChooseTeacher(registrations, groupRegistrations),
                     update
             );
         }
