@@ -2,6 +2,7 @@ package ru.peregruzochka.tg_bot_admin.handler.add_time_slot;
 
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ChooseGroupLessonHandler implements UpdateHandler {
@@ -47,6 +49,7 @@ public class ChooseGroupLessonHandler implements UpdateHandler {
             int httpCode = e.status();
             String responceBody = e.contentUTF8();
             if (httpCode == 500 && responceBody.contains("Overlapping times slots")) {
+                log.error("{}", e.status());
                 List<TimeSlotDto> timeslots = botBackendClient.getTeacherTimeSlotsByDate(teacherId, startTime.toLocalDate());
                 List<GroupTimeSlotDto> groupTimeSlots = botBackendClient.getTeacherGroupTimeSlotsByDate(teacherId, startTime.toLocalDate());
 
