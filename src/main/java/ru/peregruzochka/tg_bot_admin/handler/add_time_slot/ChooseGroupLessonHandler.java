@@ -45,24 +45,20 @@ public class ChooseGroupLessonHandler implements UpdateHandler {
 
         try {
             botBackendClient.addGroupTimeSlot(teacherId, lessonId, startTime);
-        } catch (FeignException.InternalServerError e) {
-            int httpCode = e.status();
-            String responceBody = e.contentUTF8();
-            if (httpCode == 500 && responceBody.contains("Overlapping times slots")) {
-                log.error("{}", e.status());
-                List<TimeSlotDto> timeslots = botBackendClient.getTeacherTimeSlotsByDate(teacherId, startTime.toLocalDate());
-                List<GroupTimeSlotDto> groupTimeSlots = botBackendClient.getTeacherGroupTimeSlotsByDate(teacherId, startTime.toLocalDate());
+        } catch (FeignException e) {
+            List<TimeSlotDto> timeslots = botBackendClient.getTeacherTimeSlotsByDate(teacherId, startTime.toLocalDate());
+            List<GroupTimeSlotDto> groupTimeSlots = botBackendClient.getTeacherGroupTimeSlotsByDate(teacherId, startTime.toLocalDate());
 
-                String text = chooseHourAttribute.generateTextAfterException(
-                        teacherName,
-                        startTime.toLocalDate().toString(),
-                        timeslots,
-                        groupTimeSlots
-                );
-                InlineKeyboardMarkup inlineKeyboardMarkup = chooseHourAttribute.generateChooseHourMarkup();
-                telegramBot.edit(text, inlineKeyboardMarkup, update);
-                return;
-            }
+            String text = chooseHourAttribute.generateTextAfterException(
+                    teacherName,
+                    startTime.toLocalDate().toString(),
+                    timeslots,
+                    groupTimeSlots
+            );
+            InlineKeyboardMarkup inlineKeyboardMarkup = chooseHourAttribute.generateChooseHourMarkup();
+            telegramBot.edit(text, inlineKeyboardMarkup, update);
+            return;
+
         }
 
         List<TimeSlotDto> timeslots = botBackendClient.getTeacherTimeSlotsByDate(teacherId, startTime.toLocalDate());
